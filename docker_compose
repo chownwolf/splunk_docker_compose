@@ -1,0 +1,162 @@
+version: "3.6"
+
+networks:
+  splunknet:
+    driver: bridge
+    attachable: true
+
+services:
+  sh1:
+    networks:
+      splunknet:
+        aliases:
+          - sh1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    hostname: sh1
+    container_name: sh1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=splunk_search_head
+    ports:
+      - 8000:8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  mc1:
+    networks:
+      splunknet:
+        aliases:
+          - mc1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    hostname: mc1
+    container_name: mc1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=monitoring_console
+    ports:
+      - 8001:8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  cm1:
+    networks:
+    splunknet:
+        aliases:
+          - cm1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    command: start
+    hostname: cm1
+    container_name: cm1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=splunk_cluster_master
+    ports:
+      - 8002:8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  idx1:
+    networks:
+      splunknet:
+        aliases:
+          - idx1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    command: start
+    hostname: idx1
+    container_name: idx1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=splunk_indexer
+    ports:
+      - 8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  idx2:
+    networks:
+      splunknet:
+        aliases:
+          - idx2
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    command: start
+    hostname: idx2
+    container_name: idx2
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=splunk_indexer
+    ports:
+      - 8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  idx3:
+    networks:
+      splunknet:
+        aliases:
+          - idx3
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    command: start
+    hostname: idx3
+    container_name: idx3
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_CLUSTER_MASTER_URL=cm1
+      - SPLUNK_ROLE=splunk_indexer
+    ports:
+      - 8000
+      - 8089
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+  hf1:
+    networks:
+      splunknet:
+        aliases:
+          - hf1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    hostname: hf1
+    container_name: hf1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_ROLE=splunk_heavy_forwarder
+      - SPLUNK_INDEXER_URL=idx1,idx2,idx3
+      - SPLUNK_DEPLOYMENT_SERVER=depserver1
+      - SPLUNK_ADD=tcp 1514
+    ports:
+      - 8004:8000
+      - 8088:8088
+      - 1514
+    volumes:
+      - ./default.yml:/tmp/defaults/default.yml
+
+  logstream:
+    networks:
+      splunknet:
+        aliases:
+          - logstream
+    image: ${CRIBL_IMAGE:-cribl/cribl:latest}
+    hostname: logstream
+    container_name: logstream
+    ports:
+      - 9000:9000
