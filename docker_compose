@@ -37,9 +37,9 @@ services:
     environment:
       - SPLUNK_START_ARGS=--accept-license
       - SPLUNK_INDEXER_URL=idx1,idx2,idx3
-      - SPLUNK_SEARCH_HEAD_URL=sh1
+      - SPLUNK_SEARCH_HEAD_URL=mc1
       - SPLUNK_CLUSTER_MASTER_URL=cm1
-      - SPLUNK_ROLE=monitoring_console
+      - SPLUNK_ROLE=splunk_search_head
     ports:
       - 8001:8000
       - 8089
@@ -147,7 +147,6 @@ services:
       - SPLUNK_START_ARGS=--accept-license
       - SPLUNK_ROLE=splunk_heavy_forwarder
       - SPLUNK_INDEXER_URL=idx1,idx2,idx3
-      - SPLUNK_DEPLOYMENT_SERVER=depserver1
       - SPLUNK_ADD=tcp 1514
     ports:
       - 8004:8000
