@@ -85,6 +85,8 @@ services:
     ports:
       - 8000
       - 8089
+      - 9887
+      - 9997
     volumes:
       - ./default.yml:/tmp/defaults/default.yml
 
@@ -106,6 +108,8 @@ services:
     ports:
       - 8000
       - 8089
+      - 9887
+      - 9997
     volumes:
       - ./default.yml:/tmp/defaults/default.yml
 
@@ -127,6 +131,8 @@ services:
     ports:
       - 8000
       - 8089
+      - 9887
+      - 9997
     volumes:
       - ./default.yml:/tmp/defaults/default.yml
   hf1:
@@ -147,6 +153,7 @@ services:
       - 8004:8000
       - 8088:8088
       - 1514
+      - 9997
     volumes:
       - ./default.yml:/tmp/defaults/default.yml
 
