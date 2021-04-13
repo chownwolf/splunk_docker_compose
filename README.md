@@ -15,7 +15,7 @@ Install Docker Compose
 
 https://docs.docker.com/get-started/08_using_compose/ 
 
-Copy yaml script to dev system 
+Copy yaml script to your system with Docker & Docker Compose Installed 
 
 Run Compose command:
 
