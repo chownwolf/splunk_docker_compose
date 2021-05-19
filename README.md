@@ -1,10 +1,10 @@
 # splunk_docker_compose
 This yaml script will deploy a small Splunk Cluster. 
 One Network (SplunkNet) for Containers to communicate. 
-One SH
+Three SHs
+One Deployer
 One CM
 Three IDXs
-One HF
 One Logstream Server
 
 Install Docker 
