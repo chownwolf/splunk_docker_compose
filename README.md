@@ -19,8 +19,8 @@ Copy yaml script to your system with Docker & Docker Compose Installed
 
 Run Compose command:
 
-Docker run -it -e SPLUNK_PASSWORD=<yourpassword> splunk/splunk:latest create-defaults > default.yml  
+Docker run -it -e SPLUNK_PASSWORD=\<yourpassword> splunk/splunk:latest create-defaults > default.yml  
 
 Then Run:  
 
-SPLUNK_PASSWORD=<yourpassword> docker-compose -f ./splunkcluster.yml up -d  
+SPLUNK_PASSWORD=\<yourpassword> docker-compose -f ./docker_compose.yml up -d  
