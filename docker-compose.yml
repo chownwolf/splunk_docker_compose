@@ -192,13 +192,48 @@ services:
     volumes:
       - ./default.yml:/tmp/defaults/default.yml
  
-  logstream:
+  leader1:
     networks:
       splunknet:
         aliases:
-          - logstream
+          - leader1
     image: ${CRIBL_IMAGE:-cribl/cribl:latest}
-    hostname: logstream
-    container_name: logstream
+    hostname: leader1
+    container_name: leader1
+    environment:
+      - CRIBL_DIST_MODE=master
+      - CRIBL_DIST_MASTER_URL=tcp://criblmaster@0.0.0.0:4200
+      - CRIBL_VOLUME_DIR=/opt/cribl/config-volume
     ports:
       - 9000:9000
+      - 4200
+
+  worker1:
+    networks:
+      splunknet:
+        aliases:
+          - worker1
+    image: ${CRIBL_IMAGE:-cribl/cribl:latest}
+    hostname: worker1
+    container_name: worker1
+    environment:
+      - CRIBL_DIST_MODE=worker
+      - CRIBL_DIST_MASTER_URL=tcp://criblmaster@leader1:4200
+    ports:
+      - 9001:9000
+      - 514
+
+  worker2:
+    networks:
+      splunknet:
+        aliases:
+          - worker2
+    image: ${CRIBL_IMAGE:-cribl/cribl:latest}
+    hostname: worker2
+    container_name: worker2
+    environment:
+      - CRIBL_DIST_MODE=worker
+      - CRIBL_DIST_MASTER_URL=tcp://criblmaster@leader1:4200
+    ports:
+      - 9002:9000
+      - 514
